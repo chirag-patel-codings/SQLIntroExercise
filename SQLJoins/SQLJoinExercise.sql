@@ -95,6 +95,7 @@ SELECT d.Name as 'Department Name',
     FROM products p
     JOIN sales s
       ON p.ProductID = s.ProductID
+   WHERE p.Name = 'Eagles: Hotel California'
 GROUP BY p.ProductID;
 
 /* joins: find Product name, reviewer name, rating, and comment on the Visio TV. (only return for the lowest rating!) */
@@ -126,7 +127,20 @@ This query should return:
 -  the employee's first and last name
 -  the name of each product
 -  and how many of that product they sold */
+	
+    -- RE-WRITTEN
+    SELECT e.EmployeeID,
+		   concat(e.FirstName, ' ', e.LastName) AS 'Employee Name',
+		   p.name AS 'Product Name', 
+           SUM(s.Quantity) AS 'TotalQuantitySold'
+      FROM sales s
+      JOIN employees e
+        ON s.EmployeeID = e.EmployeeID
+      JOIN products p
+        ON s.ProductID = p.ProductID
+  GROUP BY s.EmployeeID, s.ProductID;	-- s.ProductID or p.ProductID ==> GROUPS the 'p.name'
 
+/* OTHER WAY
 SELECT a.EmployeeID, 
 	   concat(e.FirstName, ' ', e.LastName) AS 'Employee Name',
        p.Name AS 'Product Name',
@@ -142,3 +156,6 @@ SELECT a.EmployeeID,
     ON e.EmployeeID = a.EmployeeID
   JOIN products p
     ON p.ProductID = a.ProductID;
+  */  
+    
+      
