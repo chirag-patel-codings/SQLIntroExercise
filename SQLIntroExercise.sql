@@ -61,6 +61,6 @@ SELECT *
  -- find all products from the products table whose stock level is in the range  -- of 500 to 1200. Order by Price from least to greatest. **Use the between keyword** 
   SELECT *
     FROM products
-   WHERE CAST(StockLevel AS SIGNED INTEGER) BETWEEN 500 AND 1200
+   WHERE CAST(StockLevel AS SIGNED INTEGER) BETWEEN 500 AND 1200		-- ALSO WORKS: "WHERE StockLevel BETWEEN 500 AND 1200"
 ORDER BY Price; -- ASC;
    
