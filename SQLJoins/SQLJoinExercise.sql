@@ -77,6 +77,7 @@ SELECT EmployeeName,
 */
 /********************************************************************************************************/		
 
+
 /* joins: find the name of the department, and the name of the category for Appliances and Games */
 
 SELECT d.Name as 'Department Name',
@@ -85,6 +86,7 @@ SELECT d.Name as 'Department Name',
   JOIN departments d
     ON c.DepartmentID = d.DepartmentID
  WHERE c.Name IN ('Appliances', 'Games');
+
 	
 /* joins: find the product name, total # sold, and total price sold,
  for Eagles: Hotel California --You may need to use SUM() */
@@ -98,20 +100,21 @@ SELECT d.Name as 'Department Name',
    WHERE p.Name = 'Eagles: Hotel California'
 GROUP BY p.ProductID;
 
+
 /* joins: find Product name, reviewer name, rating, and comment on the Visio TV. (only return for the lowest rating!) */
 
 WITH CTE_ProductReviews 
   AS (
-		  SELECT p.Name AS 'Product Name',
-				 r.Reviewer AS 'Reviewer Name',
+		  SELECT p.Name AS 'ProductName',
+				 r.Reviewer AS 'ReviewerName',
 				 r.Rating,
 				 r.Comment
 			FROM products p
 			JOIN reviews r
 			  ON p.ProductID = r.ProductID
 		   WHERE p.Name = 'Visio TV'
-	 )    SELECT 'Product Name', 
-				  'Reviewer Name', 
+	 )    SELECT ProductName AS 'Product Name', 
+				 ReviewerName AS 'Reviewer Name', 
 				  Rating, 
                   Comment  
 			 FROM CTE_ProductReviews 
@@ -119,6 +122,7 @@ WITH CTE_ProductReviews
 							  SELECT MIN(Rating) 
 								FROM CTE_ProductReviews
 						   );
+
 
 -- ------------------------------------------ Extra - May be difficult
 /* Your goal is to write a query that serves as an employee sales report.
@@ -130,15 +134,17 @@ This query should return:
 	
     -- RE-WRITTEN
     SELECT e.EmployeeID,
-		   concat(e.FirstName, ' ', e.LastName) AS 'Employee Name',
-		   p.name AS 'Product Name', 
+		   concat(e.FirstName, ' ', e.LastName) AS 'Employee_Name',
+		   p.name AS 'Product_Name', 
            SUM(s.Quantity) AS 'TotalQuantitySold'
       FROM sales s
       JOIN employees e
         ON s.EmployeeID = e.EmployeeID
       JOIN products p
         ON s.ProductID = p.ProductID
-  GROUP BY s.EmployeeID, s.ProductID;	-- s.ProductID or p.ProductID ==> GROUPS the 'p.name'
+  GROUP BY s.EmployeeID, 
+		   Employee_Name,
+           Product_Name;	-- s.ProductID or p.ProductID ==> GROUPS the 'p.name'
 
 /* OTHER WAY
 SELECT a.EmployeeID, 

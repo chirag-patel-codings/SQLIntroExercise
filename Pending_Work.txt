@@ -1,0 +1,5 @@
+/*  SQL  */
+https://www.codewars.com/kata/594a6133704e4daf5d00003d/train/sql
+SELECT CASE WHEN number1 % 1 >= 0.5 THEN TRUNC(number1)-1 ELSE TRUNC(number1)-1 END AS number1,   -- rounded down
+       CASE WHEN number2 > 0 THEN ROUND(number2) ELSE TRUNC(number2)+1 END AS number2    -- ROUNDED UP
+  FROM decimals;
