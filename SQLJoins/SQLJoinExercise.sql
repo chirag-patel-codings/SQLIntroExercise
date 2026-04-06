@@ -45,7 +45,7 @@ WITH CTE_TotalQtyByEmployee
   AS (
 		 SELECT concat (e.FirstName, ' ', e.LastName) AS 'EmployeeName', 
 			    SUM(s.Quantity)  AS 'TotalQuantitySold',
-				dense_rank() OVER(ORDER BY SUM(s.Quantity) DESC) AS row_rank		-- COULD NOT BE REFERRED DIRECTLY INTO THE QUERY ITSELF, 'ORDER BY' FOR dense_rank()
+				dense_rank() OVER(ORDER BY SUM(s.Quantity) DESC) AS row_rank		-- 'ORDER BY' FOR dense_rank()
 		   FROM employees e
 		   JOIN sales s
 			 ON e.EmployeeID = s.EmployeeID
@@ -64,8 +64,8 @@ SELECT EmployeeName,
   FROM (
 			SELECT DISTINCT a.EmployeeName, 
 							a.TotalQuantitySold, 
-							dense_rank() OVER(ORDER BY a.TotalQuantitySold DESC) AS denserank		-- COULD NOT BE REFERRED DIRECTLY INTO THE QUERY ITSELF, "ORDER BY" for dense_rank
-					   FROM (	-- NO "GROUP BY" USED FOR SUMMARY
+							dense_rank() OVER(ORDER BY a.TotalQuantitySold DESC) AS denserank		-- COULD NOT BE REFERRED DIRECTLY INTO THE QUERY ITSELF WITH "PARTITION BY", "ORDER BY" for dense_rank
+					   FROM (	-- NO "GROUP BY" USED FOR SUMMARY, [GENERATES MULTIPLE (DUPLICATE) ROWS WITH  SAME 'TotalQuantitySold' FOR EVERY RECORD OF EMPLOYEE]
 								SELECT concat (e.FirstName, ' ', e.LastName) AS 'EmployeeName',
 									   SUM(s.Quantity) OVER (PARTITION BY s.EmployeeID) AS 'TotalQuantitySold'		-- "PARTITION BY" for dense_rank as NO 'GROUP BY'
 								  FROM employees e
@@ -156,7 +156,8 @@ SELECT a.EmployeeID,
 				s.ProductID,
 				SUM(s.Quantity) AS 'TotalQuantitySold'
 		   FROM sales s
-	   GROUP BY s.EmployeeID, s.ProductID
+	   GROUP BY s.EmployeeID, 
+				s.ProductID
        ) a
   JOIN employees e
     ON e.EmployeeID = a.EmployeeID
